@@ -232,8 +232,11 @@ def main():
     # -------------------------
     all_X = []
     all_y = []
+    all_source_files = []
+    all_patient_ids = []
     channels_ref = None
     fs_ref = None
+
 
     print("[INFO] Building full windowed dataset...")
     for pid in PATIENT_IDS:
@@ -286,6 +289,10 @@ def main():
             all_X.append(X_file)
             all_y.append(y_file)
 
+            all_source_files.extend([fname] * X_file.shape[0])
+            all_patient_ids.extend([pid] * X_file.shape[0])
+
+
     if len(all_X) == 0:
         print("[ERROR] No data collected. Check RAW_DATA_DIR, PATIENT_IDS, and file structure.")
         return
@@ -305,6 +312,9 @@ def main():
     # -------------------------
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
 
+    assert len(all_source_files) == X.shape[0], f"source_files length {len(all_source_files)} != num_windows {X.shape[0]}"
+    assert len(all_patient_ids) == X.shape[0], f"patient_ids length {len(all_patient_ids)} != num_windows {X.shape[0]}"
+
     np.savez_compressed(
         OUTPUT_PATH,
         X=X,
@@ -313,6 +323,8 @@ def main():
         window_sec=WINDOW_SEC,
         channels=np.array(channels_ref),
         patients=np.array(PATIENT_IDS),
+        source_files=np.array(all_source_files),
+        patient_ids=np.array(all_patient_ids),
     )
 
     print(f"\n[INFO] Saved processed dataset to: {OUTPUT_PATH}")
