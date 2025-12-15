@@ -1,20 +1,29 @@
+# --------------------
 # Python
+# --------------------
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
-*.ipynb_checkpoints
+.ipynb_checkpoints/
 
+# --------------------
 # Environments
+# --------------------
 .env
 .venv
 venv/
 env/
 
-# Data
-data/raw/
-data/interim/
-data/processed/
+# --------------------
+# Data (VERY IMPORTANT)
+# --------------------
+/data/
+*.edf
+*.edf.seizures
+RECORDS*
+physionet.org/
+seizure_files_urls.txt
 
+# --------------------
 # OS
+# --------------------
 .DS_Store
